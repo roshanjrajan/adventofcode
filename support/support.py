@@ -26,7 +26,7 @@ def timing(name: str = '') -> Generator[None, None, None]:
 
 
 def get_input(year: int, day: int) -> str:
-    with open('../.env') as f:
+    with open('../../.env') as f:
         contents = f.read()
 
     url = f'https://adventofcode.com/{year}/day/{day}/input'
