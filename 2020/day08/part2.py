@@ -15,23 +15,45 @@ def compute(s: str) -> int:
     # for n in numbers:
     #     pass
 
-    lines = s.splitlines()
-    touched = [False] * len(lines)
-    curr_instr = 0
-    acc = 0
+    orig_data = s.splitlines()
+    count = 0
+    changed_instr = 0
+    found = False
+    while not found:
+        curr_run = list(orig_data)
 
-    while touched[curr_instr] == False:
-        touched[curr_instr] = True
-        op, val = lines[curr_instr].split()
-        match op:
-            case 'acc':
+        for i, instr in enumerate(curr_run[changed_instr + 1:]):
+            op, val = instr.split()
+            if op == "nop":
+                curr_run[i] = "jmp " + val
+                changed_instr = i
+                break
+            elif op == "jmp":
+                curr_run[i] = "nop " + val
+                changed_instr = i
+                break
+
+        print(count)
+        touched = [False] * len(curr_run)
+        curr_instr = 0
+        acc = 0
+        while touched[curr_instr] == False:
+            touched[curr_instr] = True
+            op, val = curr_run[curr_instr].split()
+            print(f"{curr_instr=} - {op} {val}")
+            if op == 'acc':
                 acc += int(val)
                 curr_instr += 1
-            case 'jmp':
+            elif op == 'jmp':
                 curr_instr += int(val)
-            case 'nop':
+            elif op == 'nop':
                 curr_instr += 1
 
+            if curr_instr >= len(curr_run):
+                found = True
+                break
+        count += 1
+        break
 
     return acc
 
